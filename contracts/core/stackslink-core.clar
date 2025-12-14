@@ -19,7 +19,15 @@
 (define-data-var request-nonce uint u0)
 
 ;; data maps
-;; TODO: Map request-id to request-details (requester, callback, status)
+(define-map requests
+    uint
+    {
+        requester: principal,
+        callback-contract: principal,
+        callback-function: (string-ascii 30),
+        status: (string-ascii 20),
+    }
+)
 
 ;; public functions
 
