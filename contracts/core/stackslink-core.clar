@@ -1,11 +1,10 @@
-
 ;; title: stackslink-core
 ;; version: 0.1.0
 ;; summary: Core logic for StacksLink oracle requests and fulfillment
 ;; description: Handles the lifecycle of an oracle request, from initiation by a consumer to fulfillment by a node.
 
 ;; traits
-;; TODO: Implement use-trait for oracle-trait
+(use-trait oracle-trait .oracle-trait.oracle-trait)
 
 ;; constants
 ;; TODO: Define error constants (e.g., ERR-UNAUTHORIZED, ERR-REQUEST-EXPIRED)
