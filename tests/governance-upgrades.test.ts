@@ -40,7 +40,9 @@ describe("Governance Upgrades: Contract upgrade via governance vote", () => {
 
     // Step 2: Deployer proposes a contract upgrade (using wallet3 as the new contract address)
     const newContractPrincipal = Cl.standardPrincipal(wallet3);
-    const proposalDescription = Cl.stringAscii("Upgrade to v2 contract with enhanced security");
+    const proposalDescription = Cl.stringAscii(
+      "Upgrade to v2 contract with enhanced security"
+    );
 
     const proposeResult = simnet.callPublicFn(
       "access-control",
