@@ -178,4 +178,30 @@ describe("Access Control: Role Assignment", () => {
     );
     expect(hasUpgrader.result).toBeBool(true);
   });
+
+  it("rejects granting invalid role", () => {
+    const INVALID_ROLE = Cl.uint(99);
+
+    // Try to grant an invalid role
+    const grantResult = simnet.callPublicFn(
+      "access-control",
+      "grant-role",
+      [INVALID_ROLE, Cl.standardPrincipal(wallet1)],
+      deployer
+    );
+    expect(grantResult.result).toBeErr(Cl.uint(101)); // ERR-INVALID-ROLE
+  });
+
+  it("rejects revoking invalid role", () => {
+    const INVALID_ROLE = Cl.uint(99);
+
+    // Try to revoke an invalid role
+    const revokeResult = simnet.callPublicFn(
+      "access-control",
+      "revoke-role",
+      [INVALID_ROLE, Cl.standardPrincipal(wallet1)],
+      deployer
+    );
+    expect(revokeResult.result).toBeErr(Cl.uint(101)); // ERR-INVALID-ROLE
+  });
 });
