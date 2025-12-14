@@ -39,4 +39,24 @@ describe("Access Control: Role Assignment", () => {
     );
     expect(hasRoleAfter.result).toBeBool(true);
   });
+
+  it("prevents non-admin from granting roles", () => {
+    // wallet1 (non-admin) tries to grant ADMIN role to wallet2
+    const grantResult = simnet.callPublicFn(
+      "access-control",
+      "grant-role",
+      [ROLE_ADMIN, Cl.standardPrincipal(wallet2)],
+      wallet1
+    );
+    expect(grantResult.result).toBeErr(Cl.uint(100)); // ERR-UNAUTHORIZED
+
+    // Verify wallet2 still does not have admin role
+    const hasRole = simnet.callReadOnlyFn(
+      "access-control",
+      "has-role",
+      [ROLE_ADMIN, Cl.standardPrincipal(wallet2)],
+      deployer
+    );
+    expect(hasRole.result).toBeBool(false);
+  });
 });
