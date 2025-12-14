@@ -130,4 +130,32 @@ describe("Node Registry: Remove Node", () => {
     );
     expect(nodeAfter.result).toBeNone();
   });
+
+  it("prevents unauthorized user from removing a node", () => {
+    // Register a node as wallet1
+    simnet.callPublicFn(
+      "node-registry",
+      "register-node",
+      [samplePublicKey, sampleEndpoint],
+      wallet1
+    );
+
+    // wallet2 (not owner, not the node) tries to remove wallet1's node
+    const removeResult = simnet.callPublicFn(
+      "node-registry",
+      "remove-node",
+      [Cl.standardPrincipal(wallet1)],
+      wallet2
+    );
+    expect(removeResult.result).toBeErr(Cl.uint(100)); // ERR-UNAUTHORIZED
+
+    // Verify node still exists
+    const nodeAfter = simnet.callReadOnlyFn(
+      "node-registry",
+      "get-node",
+      [Cl.standardPrincipal(wallet1)],
+      deployer
+    );
+    expect(nodeAfter.result).not.toBeNone();
+  });
 });
