@@ -68,13 +68,29 @@
     )
 )
 
-;; TODO: fulfill-request
-;; Input: request-id, data, signature/proof
-;; Logic:
-;; 1. Validate sender is authorized node
-;; 2. Validate request exists and is pending
-;; 3. Call the callback function on the consumer contract
-;; 4. Update request status to fulfilled
+(define-public (fulfill-request
+        (request-id uint)
+        (data (buff 2048))
+        (signature (buff 65))
+    )
+    (let ((request (unwrap! (map-get? requests request-id) ERR-REQUEST-NOT-FOUND)))
+        ;; 1. Validate sender is authorized node
+        ;; TODO: Check against node-registry contract
+        ;; For now, we'll assume a trusted sender or implement a simple check
+        ;; (asserts! (is-authorized tx-sender) ERR-UNAUTHORIZED)
+
+        ;; 2. Validate request exists and is pending
+        ;; TODO: Validate request exists and is pending
+
+        ;; 3. Call the callback function on the consumer contract
+        ;; TODO: Call the callback function on the consumer contract
+
+        ;; 4. Update request status to fulfilled
+        ;; TODO: Update request status to fulfilled
+
+        (ok true)
+    )
+)
 
 ;; read only functions
 
