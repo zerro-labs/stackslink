@@ -2,7 +2,7 @@
 ;; title: access-control
 ;; version: 0.1.0
 ;; summary: Governance and access control module
-;; description: Manages roles and permissions for the StacksLink protocol.
+;; description: Manages roles and permissions for the StacksLink protocol with governance-based upgrades.
 
 ;; constants
 (define-constant ROLE-ADMIN u1)
