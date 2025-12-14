@@ -158,4 +158,51 @@ describe("Node Registry: Remove Node", () => {
     );
     expect(nodeAfter.result).not.toBeNone();
   });
+
+  it("fails when trying to remove non-existent node", () => {
+    // Try to remove a node that was never registered
+    const removeResult = simnet.callPublicFn(
+      "node-registry",
+      "remove-node",
+      [Cl.standardPrincipal(wallet2)],
+      deployer
+    );
+    expect(removeResult.result).toBeErr(Cl.uint(101)); // ERR-NODE-NOT-FOUND
+  });
+
+  it("decrements node count after removal", () => {
+    // Register a node
+    simnet.callPublicFn(
+      "node-registry",
+      "register-node",
+      [samplePublicKey, sampleEndpoint],
+      wallet1
+    );
+
+    // Check node count
+    const countBefore = simnet.callReadOnlyFn(
+      "node-registry",
+      "get-node-count",
+      [],
+      deployer
+    );
+    expect(countBefore.result).toEqual(Cl.uint(1));
+
+    // Remove the node
+    simnet.callPublicFn(
+      "node-registry",
+      "remove-node",
+      [Cl.standardPrincipal(wallet1)],
+      deployer
+    );
+
+    // Check node count decreased
+    const countAfter = simnet.callReadOnlyFn(
+      "node-registry",
+      "get-node-count",
+      [],
+      deployer
+    );
+    expect(countAfter.result).toEqual(Cl.uint(0));
+  });
 });
