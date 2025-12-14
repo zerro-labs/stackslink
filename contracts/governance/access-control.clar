@@ -5,23 +5,52 @@
 ;; description: Manages roles and permissions for the StacksLink protocol.
 
 ;; constants
-;; TODO: Define roles (ADMIN, OPERATOR_MANAGER, UPGRADER)
+(define-constant ROLE-ADMIN u1)
+(define-constant ROLE-OPERATOR-MANAGER u2)
+(define-constant ROLE-UPGRADER u3)
+
+(define-constant ERR-UNAUTHORIZED (err u100))
+(define-constant ERR-INVALID-ROLE (err u101))
+
+;; data vars
+(define-data-var contract-owner principal tx-sender)
 
 ;; data maps
-;; TODO: Map principal to roles
+(define-map roles { account: principal, role: uint } bool)
+
+;; private functions
+
+(define-private (is-admin (account principal))
+    (or 
+        (is-eq account (var-get contract-owner))
+        (default-to false (map-get? roles { account: account, role: ROLE-ADMIN }))
+    )
+)
 
 ;; public functions
 
-;; TODO: grant-role
-;; Input: role, account
-;; Logic: Admin only
+(define-public (grant-role (role uint) (account principal))
+    (begin
+        (asserts! (is-admin tx-sender) ERR-UNAUTHORIZED)
+        (asserts! (or (is-eq role ROLE-ADMIN) (is-eq role ROLE-OPERATOR-MANAGER) (is-eq role ROLE-UPGRADER)) ERR-INVALID-ROLE)
+        (ok (map-set roles { account: account, role: role } true))
+    )
+)
 
-;; TODO: revoke-role
-;; Input: role, account
-;; Logic: Admin only
+(define-public (revoke-role (role uint) (account principal))
+    (begin
+        (asserts! (is-admin tx-sender) ERR-UNAUTHORIZED)
+        (asserts! (or (is-eq role ROLE-ADMIN) (is-eq role ROLE-OPERATOR-MANAGER) (is-eq role ROLE-UPGRADER)) ERR-INVALID-ROLE)
+        (ok (map-delete roles { account: account, role: role }))
+    )
+)
 
 ;; read only functions
 
-;; TODO: has-role
-;; Input: role, account
-;; Output: bool
+(define-read-only (has-role (role uint) (account principal))
+    (default-to false (map-get? roles { account: account, role: role }))
+)
+
+(define-read-only (get-contract-owner)
+    (var-get contract-owner)
+)
