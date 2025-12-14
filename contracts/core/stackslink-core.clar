@@ -11,7 +11,9 @@
 (define-constant ERR-REQUEST-EXPIRED (err u101))
 (define-constant ERR-REQUEST-NOT-FOUND (err u102))
 (define-constant ERR-INVALID-PAYMENT (err u103))
-;; TODO: Define system constants (e.g., MIN-CONFIRMATIONS)
+
+(define-constant MIN-CONFIRMATIONS u3)
+(define-constant REQUEST-EXPIRY-BLOCKS u144) ;; ~24 hours
 
 ;; data vars
 ;; TODO: Track request IDs (nonce)
