@@ -7,7 +7,10 @@
 (use-trait oracle-trait .oracle-trait.oracle-trait)
 
 ;; constants
-;; TODO: Define error constants (e.g., ERR-UNAUTHORIZED, ERR-REQUEST-EXPIRED)
+(define-constant ERR-UNAUTHORIZED (err u100))
+(define-constant ERR-REQUEST-EXPIRED (err u101))
+(define-constant ERR-REQUEST-NOT-FOUND (err u102))
+(define-constant ERR-INVALID-PAYMENT (err u103))
 ;; TODO: Define system constants (e.g., MIN-CONFIRMATIONS)
 
 ;; data vars
